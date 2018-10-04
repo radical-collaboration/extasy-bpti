@@ -51,6 +51,8 @@ def generate_pipeline(index, iterations, ensemble_size):
 
         if iter_cnt != 0:
 
+            
+            # STAGE/KERNEL 1
             # Create a Stage object
             s1 = Stage()
             s1.name = 'grompp-stage-%s' %iter_cnt
@@ -105,6 +107,53 @@ def generate_pipeline(index, iterations, ensemble_size):
 
             # Add Stage to our pipeline
             p.add_stages(s1)
+
+            # STAGE/ KERNEL 2
+            s2 = Stage()
+            s2.name = 'mdrun-stage-%s'%iter_cnt
+
+            for t_cnt in range(ensemble_size):
+
+                #Create a Task Object
+                t = Task()
+                t.name = 's2-task-%s'%t_cnt
+
+                # Same pre_exec as in k def files for specific target resources 
+                t.pre_exec = ["export PATH=$PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/bin",
+                              "export GROMACS_LIB=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/lib64",
+                              "export GROMACS_INC=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/include",
+                              "export GROMACS_BIN=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/bin",
+                              "export GROMACS_DIR=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu",
+                              "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/lib64"]
+                t.executable = ["gmx_mpi mdrun"] 
+
+                # Number of cores for non-mpi Gromacs
+                # t.cpu_reqs = {
+                #           ‘processes’: 1,                # Default is 1
+                #           ‘process_type’: None,          # Default is None, Other option is 'MPI'
+                #           ‘threads_per_process’: Kconfig.num_cores_per_sim_cu,     # Default is 1
+                #           ‘thread_type’: OpenMP}         # Default is None, Other option is 'OpenMP'
+
+                #from kernel mdrun.py - arguments = ['-deffnm','{0}'.format(self.get_arg("--deffnm="))]
+                #from nwexgmx_v002.py - k2_min_kernel.arguments = ["--deffnm=min-{0}_{1}".format(iterMod-1,instance-1)]
+                #NOTE - check for error here
+                t.arguments = ["-deffnm=min-{0}_{1}".format(iter_cnt,t_cnt)]
+
+                #k2_min_kernel.link_input_data = [shareDir+'/min-{0}_{1}.tpr > min-{0}_{1}.tpr'.format(iterMod-1,instance-1)]
+                t.link_input_data = [ shareDir+'/min-{0}_{1}.tpr > min-{0}_{1}.tpr'.format(iter_cnt,t_cnt)]
+                
+                t.copy_output_data = ['min-{0}_{1}.gro >'.format(iter_cnt,t_cnt) +shareDir+'/min-{0}_{1}.gro'.format(iter_cnt,t_cnt)]
+            
+                s2.add_task(t)
+
+            p.add_stages(s2)
+
+            # STAGE/ KERNEL 3
+
+
+
+
+            # STAGE/ KERNEL 4
 
         # TODO: Kernel 5 -> Stage 5
 
