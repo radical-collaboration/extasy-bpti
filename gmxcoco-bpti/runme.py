@@ -1,6 +1,11 @@
 from radical.entk import Pipeline, Stage, Task, AppManager
 import os
-
+import argparse
+import glob
+import sys
+import imp
+import json
+import traceback
 # ------------------------------------------------------------------------------
 # Set default verbosity
 if os.environ.get('RADICAL_ENTK_VERBOSE') == None:
@@ -15,7 +20,7 @@ if os.environ.get('RADICAL_ENTK_VERBOSE') == None:
 # VM, set "RMQ_HOSTNAME" and "RMQ_PORT" in the session where you are running
 # this script.
 hostname = os.environ.get('RMQ_HOSTNAME', 'localhost')
-port = os.environ.get('RMQ_PORT', 5672)
+port = int(os.environ.get('RMQ_PORT', 5672))
 
 # Share directory with ALL data
 #shareDir="$SHARED"
@@ -25,7 +30,8 @@ port = os.environ.get('RMQ_PORT', 5672)
 # # note tried without / before work and failed. diff err for /work/.. than work/..
 #shareDir="/work/fbettenc/radical.pilot.sandbox/rp.session.js-17-187.jetstream-cloud.org.hal9000.017508.0005-pilot.0000/staging_area"
 
-shareDir="/work/fbettenc/p14b01_pool/staging_area"
+#shareDir="/work/fbettenc/p14b01_pool/staging_area"
+shareDir='$SHARED'
 
 # References to previous iterations, effects starting iteration of current run
 # prev_sim_last_iter_to_use=48
@@ -39,6 +45,7 @@ outbase, ext = None, None
 # NOTE: All stages, tasks, filenames are indexed from 0.
 
 def generate_pipeline(index, iterations, ensemble_size):
+#def generate_pipeline(index): #, iterations, ensemble_size):
 
     # Create a Pipeline object
     p = Pipeline()
@@ -73,14 +80,6 @@ def generate_pipeline(index, iterations, ensemble_size):
 
                 # Same executable as in the kernel def files for the specific target resource                                
                 t.executable = ["gmx grompp"]
-
-                # Number of cores for non-mpi Gromacs
-                # t.cpu_reqs = {
-                #           ‘processes’: 1,                # Default is 1
-                #           ‘process_type’: None,          # Default is None, Other option is 'MPI'
-                #           ‘threads_per_process’: Kconfig.num_cores_per_sim_cu,     # Default is 1
-                #           ‘thread_type’: OpenMP}         # Default is None, Other option is 'OpenMP'
-
 
                 # Same flags arguments as in the kernel def file, but secondary arguments from the main file
                 t.arguments = [ '-f','{0}'.format(os.path.basename(Kconfig.grompp_1_mdp)),
@@ -128,11 +127,6 @@ def generate_pipeline(index, iterations, ensemble_size):
                 t.executable = ["gmx_mpi mdrun"] 
 
                 # Number of cores for non-mpi Gromacs
-                # t.cpu_reqs = {
-                #           ‘processes’: 1,                # Default is 1
-                #           ‘process_type’: None,          # Default is None, Other option is 'MPI'
-                #           ‘threads_per_process’: Kconfig.num_cores_per_sim_cu,     # Default is 1
-                #           ‘thread_type’: OpenMP}         # Default is None, Other option is 'OpenMP'
 
                 #from kernel mdrun.py - arguments = ['-deffnm','{0}'.format(self.get_arg("--deffnm="))]
                 #from nwexgmx_v002.py - k2_min_kernel.arguments = ["--deffnm=min-{0}_{1}".format(iterMod-1,instance-1)]
@@ -144,7 +138,7 @@ def generate_pipeline(index, iterations, ensemble_size):
                 
                 t.copy_output_data = ['min-{0}_{1}.gro >'.format(iter_cnt,t_cnt) +shareDir+'/min-{0}_{1}.gro'.format(iter_cnt,t_cnt)]
             
-                s2.add_task(t)
+                s2.add_tasks(t)
 
             p.add_stages(s2)
 
@@ -213,7 +207,7 @@ if __name__ == '__main__':
 
 
     try: 
-
+	parser = argparse.ArgumentParser()
         parser.add_argument('--RPconfig', help='link to Radical Pilot related configurations file')
         parser.add_argument('--Kconfig', help='link to Kernel configurations file')
 
@@ -266,7 +260,8 @@ if __name__ == '__main__':
 
         # Assign the workflow as a set or list of Pipelines to the Application Manager
         # Note: The list order is not guaranteed to be preserved
-        extasy_pipeline = generate_pipeline('1')
+        #def generate_pipeline(index, iterations, ensemble_size):
+	extasy_pipeline = generate_pipeline(1,Kconfig.num_iterations,Kconfig.num_CUs)
         appman.workflow = [extasy_pipeline]
 
         # Run the Application Manager
