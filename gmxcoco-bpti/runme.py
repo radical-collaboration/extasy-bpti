@@ -54,6 +54,16 @@ def generate_pipeline(index, iterations, ensemble_size):
     # Determine total iterations of all runs, current+historic
     total_iterations = prev_sim_last_iter_to_use + iterations
 
+    # settings for MD sims 
+                #t.cpu_reqs = { 
+                 #               'processes':Kconfig.num_cores_per_sim_cu, #defualt is 1 
+                  #              'process_type': None,                                     # default is None, Other option is 'MPI'
+                   #             'threads_per_process':32,       # default is 1. set to 32 for bw 
+                    #            'thread_type':OpenMP                                      # default is Non, Other option is 'OpenMP'
+                     #           }
+    # Question - Vivek - Kconfig
+    md_stage_core_settings = { 'processes':Kconfig.num_cores_per_sim_cu/32,'process_type': MPI, 'threads_per_process':32,'thread_type':OpenMP }    
+
     for iter_cnt in range(prev_sim_last_iter_to_use, total_iterations):
 
         if iter_cnt != 0:
@@ -69,6 +79,8 @@ def generate_pipeline(index, iterations, ensemble_size):
                 # Create a Task object
                 t = Task()
                 t.name = 'grompp-task-%s'%t_cnt
+
+                t.cpu_reqs = md_stage_core_settings  
 
                 # Same pre_exec as in the kernel def files for the specific target resource
                 t.pre_exec = [  "export PATH=$PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/bin",
@@ -117,6 +129,8 @@ def generate_pipeline(index, iterations, ensemble_size):
                 t = Task()
                 t.name = 's2-task-%s'%t_cnt
 
+                t.cpu_reqs = md_stage_core_settings
+
                 # Same pre_exec as in k def files for specific target resources 
                 t.pre_exec = ["export PATH=$PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/bin",
                               "export GROMACS_LIB=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/lib64",
@@ -149,6 +163,8 @@ def generate_pipeline(index, iterations, ensemble_size):
             for t_cnt in range(ensemble_size):
                 t = task()
                 t.name = 'grompp-task-%s't_cnt
+
+                t.cpu_reqs = md_stage_core_settings
 
                 #k3_prep_eq_kernel.link_input_data = [shareDir+'/{0}'.format(os.path.basename(Kconfig.grompp_2_mdp)),
                 #                                     shareDir+'/{0}'.format(os.path.basename(Kconfig.top_file)),
@@ -192,6 +208,9 @@ def generate_pipeline(index, iterations, ensemble_size):
             for t_cnt in range(ensemble_size):
                 t = task()
                 t.name = 'mdrun-task-%s'%t_cnt
+
+                t.cpu_reqs = md_stage_core_settings
+
                 #k4_eq_kernel.link_input_data = [shareDir+'/eq-{0}_{1}.tpr > eq-{0}_{1}.tpr'.format(iterMod-1,instance-1)]
                 t.link_input_data = [shareDir+'/eq-{0}_{1}.tpr > eq-{0}_{1}.tpr'.format(iter_cnt,t_cnt)]
                 
@@ -218,6 +237,8 @@ def generate_pipeline(index, iterations, ensemble_size):
             t = Task()
             t.name = 's5-task-%s'%t_cnt
 
+            t.cpu_reqs = md_stage_core_settings
+
             k5_prep_sim_kernel.link_input_data = [shareDir+'/{0}'.format(os.path.basename(Kconfig.grompp_3_mdp)),
                                              shareDir+'/{0}'.format(os.path.basename(Kconfig.top_file))]
             
@@ -231,7 +252,10 @@ def generate_pipeline(index, iterations, ensemble_size):
             # Same executable as in the kernel def files for the specific target resource                                
             t.executable = ["gmx grompp"]
             
-            if((iterMod-1)==0):
+            
+
+            #if((iterMod-1)==0):
+            if((iter_cnt)==0):
                 #k5_prep_sim_kernel.link_input_data =  k5_prep_sim_kernel.link_input_data + [shareDir+'/{0}'.format(os.path.basename(Kconfig.initial_crd_file))]
                 
                 # Copy link_input_data from main file, edit 'iterMod'->iter_cnt and 
@@ -285,6 +309,8 @@ def generate_pipeline(index, iterations, ensemble_size):
             t = Task()
             t.name = 's6-task-%s'%t_cnt
 
+            t.cpu_reqs = md_stage_core_settings
+
             # Same pre_exec as in k def files for specific target resources 
             t.pre_exec = ["export PATH=$PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/bin",
                           "export GROMACS_LIB=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/lib64",
@@ -301,8 +327,8 @@ def generate_pipeline(index, iterations, ensemble_size):
             #k6_sim_kernel.link_input_data = [shareDir+'/md-{0}_{1}.tpr > md-{0}_{1}.tpr'.format(iterMod-1,instance-1)]
             t.link_input_data = [ shareDir+'/md-{0}_{1}.tpr > md-{0}_{1}.tpr'.format(iter_cnt,t_cnt)]
 
-            k6_sim_kernel.copy_output_data = ["md-{0}_{1}.gro > ".format(iterMod-1,instance-1) +shareDir+"/md-{0}_{1}.gro".format(iterMod-1,instance-1),
-                                             "md-{0}_{1}.xtc > ".format(iterMod-1,instance-1) +shareDir+"/md-{0}_{1}.xtc".format(iterMod-1,instance-1)]
+            #k6_sim_kernel.copy_output_data = ["md-{0}_{1}.gro > ".format(iterMod-1,instance-1) +shareDir+"/md-{0}_{1}.gro".format(iterMod-1,instance-1),
+            #                                 "md-{0}_{1}.xtc > ".format(iterMod-1,instance-1) +shareDir+"/md-{0}_{1}.xtc".format(iterMod-1,instance-1)]
 
             t.copy_output_data = ["md-{0}_{1}.gro > ".format(iter_cnt,t_cnt) +shareDir+"/md-{0}_{1}.gro".format(iter_cnt,t_cnt),
                                   "md-{0}_{1}.xtc > ".format(iter_cnt,t_cnt) +shareDir+"/md-{0}_{1}.xtc".format(iter_cnt,t_cnt)]
@@ -320,6 +346,8 @@ def generate_pipeline(index, iterations, ensemble_size):
         for t_cnt in range(ensemble_size):
             t = task()
             t.name = 'traj-task-%s'%t_cnt
+
+            t.cpu_reqs = md_stage_core_settings
 
             #k7_sim_kernel.link_input_data = [shareDir+"/md-{0}_{1}.gro > md-{0}_{1}.gro".format(iterMod-1,instance-1),
             #                                 shareDir+"/md-{0}_{1}.tpr > md-{0}_{1}.tpr".format(iterMod-1,instance-1)]
@@ -361,22 +389,24 @@ def generate_pipeline(index, iterations, ensemble_size):
             t = Task()
             t.name = 'traj-task-%s'%t_cnt
 
+            t.cpu_reqs = md_stage_core_settings
+
             #k8_sim_kernel.link_input_data = [shareDir+"/md-{0}_{1}.xtc > md-{0}_{1}.xtc".format(iterMod-1,instance-1),
             #                              shareDir+"/md-{0}_{1}.tpr > md-{0}_{1}.tpr".format(iterMod-1,instance-1)]
             
             t.link_input_data = [shareDir+"/md-{0}_{1}.xtc > md-{0}_{1}.xtc".format(iterMod-1,instance-1),
                                           shareDir+"/md-{0}_{1}.tpr > md-{0}_{1}.tpr".format(iterMod-1,instance-1)]
 
-            k8_sim_kernel.arguments = ["--echo=System",
-                                       "--f=md-{0}_{1}.xtc".format(iterMod-1,instance-1),
-                                       "--s=md-{0}_{1}.tpr".format(iterMod-1,instance-1),
-                                       "--o=md-{0}_{1}_whole.xtc".format(iterMod-1,instance-1),
-                                       "--pbc=whole"]
+            #k8_sim_kernel.arguments = ["--echo=System",
+            #                           "--f=md-{0}_{1}.xtc".format(iterMod-1,instance-1),
+            #                           "--s=md-{0}_{1}.tpr".format(iterMod-1,instance-1),
+            #                           "--o=md-{0}_{1}_whole.xtc".format(iterMod-1,instance-1),
+            #                           "--pbc=whole"]
             t.arguments = ['-l','-c','echo System | gmx trjconv -f md-{0}_{1}.xtc -o md-{0}_{1}_whole.xtc -s md-{0}_{1}.tpr -pbc whole'.format(iter_cnt,t_cnt)]
             
             #if(iterMod%Kconfig.nsave==0):
             if(iter_cnt%Kconfig.nsave==0):
-                k8_sim_kernel.download_output_data = ["md-{0}_{1}_whole.xtc > output/iter{0}/md-{0}_{1}_whole.xtc".format(iterMod-1,instance-1)]
+                #k8_sim_kernel.download_output_data = ["md-{0}_{1}_whole.xtc > output/iter{0}/md-{0}_{1}_whole.xtc".format(iterMod-1,instance-1)]
                 t.download_output_data = ["md-{0}_{1}_whole.xtc > output/iter{0}/md-{0}_{1}_whole.xtc".format(iter_cnt,t_cnt)]
 
             #k8_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.xtc > $SHARED/md-{0}_{1}.xtc".format(iterMod-1,instance-1)]        
@@ -388,61 +418,16 @@ def generate_pipeline(index, iterations, ensemble_size):
         p.add_stages(s8)
 
 
-    return p        
-    # # Add the Task to the Stage
-    # s1.add_tasks(t1)
+            
+ 
 
-    # # Add Stage to the Pipeline
-    # p.add_stages(s1)
-
-    # # Create another Stage object to hold character count tasks
-    # s2 = Stage()
-    # s2.name = 's2'
-    # s2_task_uids = []
-
-    # for cnt in range(10):
-
-    #     # Create a Task object
-    #     t2 = Task()
-    #     t2.name = 't%s' % (cnt + 1)
-    #     t2.executable = ['/bin/bash']
-    #     t2.arguments = ['-l', '-c', 'grep -o . output.txt | sort | uniq -c > ccount.txt']
-    #     # Copy data from the task in the first stage to the current task's location
-    #     t2.copy_input_data = ['$Pipline_%s_Stage_%s_Task_%s/output.txt' % (p.name, s1.name, t1.name)]
-
-    #     # Add the Task to the Stage
-    #     s2.add_tasks(t2)
-    #     s2_task_uids.append(t2.name)
-
-    # # Add Stage to the Pipeline
-    # p.add_stages(s2)
-
-    # # Create another Stage object to hold checksum tasks
-    # s3 = Stage()
-    # s3.name = 's3'
-
-    # for cnt in range(10):
-
-    #     # Create a Task object
-    #     t3 = Task()
-    #     t3.name = 't%s' % (cnt + 1)
-    #     t3.executable = ['/bin/bash']
-    #     t3.arguments = ['-l', '-c', 'sha1sum ccount.txt > chksum.txt']
-    #     # Copy data from the task in the first stage to the current task's location
-    #     t3.copy_input_data = ['$Pipline_%s_Stage_%s_Task_%s/ccount.txt' % (p.name, s2.name, s2_task_uids[cnt])]
-    #     # Download the output of the current task to the current location
-    #     t3.download_output_data = ['chksum.txt > chksum_%s.txt' % cnt]
-
-    #     # Add the Task to the Stage
-    #     s3.add_tasks(t3)
-
-    # # Add Stage to the Pipeline
-    # p.add_stages(s3)
-    def analysis_stage(self, iteration, instance):
+        # dont need extra "def" in entk-0.7 ( see lsdmap example) it will just be stage 9
+        #def analysis_stage(self, iteration, instance):
         '''
         function : Perform CoCo Analysis on the output of the simulation from the current iterMod. Using the .xtc
          files generated in all instances, generate .gro files (as many as the num_CUs) to be used in the next simulations. 
         
+        # KERNEL / STAGE 9
 
         coco :-
 
@@ -457,53 +442,126 @@ def generate_pipeline(index, iterations, ensemble_size):
                             --cycle          = Current iterMod number
                             --atom_selection = Selection of the biological part of the system we want to consider for analysis
         '''
+        
+        s9 = Stage()
+        s9.name = 'coco-iter-%s'%iter_cnt
+
         #shareDir="$SHARED"
         #shareDir="/work/fbettenc/radical.pilot.sandbox/rp.session.js-17-187.jetstream-cloud.org.hal9000.017508.0005-pilot.0000/staging_area"
-    shareDir = "/work/fbettenc/p14b01_pool/staging_area"
-
-        prev_sim_last_iter_to_use=48
-        iterMod=iteration+prev_sim_last_iter_to_use
-
-        k1_ana_kernel = Kernel(name="custom.coco")
-
-        outbase, ext = os.path.basename(Kconfig.output).split('.')
-        if ext == '':
-            ext = '.pdb'        
         
-        k1_ana_kernel.arguments = ["--grid={0}".format(Kconfig.grid),
-                                   "--dims={0}".format(Kconfig.dims),
-                                   "--frontpoints={0}".format(Kconfig.num_CUs),
-                                   "--topfile=md-{0}_0.gro".format(iterMod-1),
-                                   "--mdfile=*.xtc",
-                                   "--output={0}_{1}_.gro".format(outbase,iterMod-1),
-                                   "--atom_selection={0}".format(Kconfig.sel)]
+        # commeting out bec global var shareDir should have this taken care of 
+            #shareDir = "/work/fbettenc/p14b01_pool/staging_area"
+        # also commenting out bec global far prev_sim_last_iter_to_use is also global
+            #prev_sim_last_iter_to_use=48
+        #iterMod=iteration+prev_sim_last_iter_to_use
+        total_iterations = prev_sim_last_iter_to_use + iterations
+        #k1_ana_kernel = Kernel(name="custom.coco")
+
+        # outbase also taken care of global vars 
+        #outbase, ext = os.path.basename(Kconfig.output).split('.')
+        #if ext == '':
+            #ext = '.pdb'        
+        # NOTE this analysis step is done using only ONE TASK ( cores can increase )
+        # so there will be no for loop for tasks like other kernels
+
+        t = task()
+        t.name = 'analysis-task-1'
+
+        # need to set it so that the single analysis task uses only as many cores as there are files to input
+        # if it tries to use more it will be slow 
+
+
        # k1_ana_kernel.cores = min(Kconfig.num_CUs,RPconfig.PILOTSIZE)
-        k1_ana_kernel.cores = min(Kconfig.num_CUs*(iterMod+1),RPconfig.PILOTSIZE) # set to iterMod+1 bec at first iter coco analysis of k8 output so coco is iter ahead sort of
+        #k1_ana_kernel.cores = min(Kconfig.num_CUs*(iterMod+1),RPconfig.PILOTSIZE) # set to iterMod+1 bec at first iter coco analysis of k8 output so coco is iter ahead sort of
+            #print " "
+            #print "iter,iterMod,AnaCUcores = ",iteration,", ",iterMod,", ", k1_ana_kernel.cores
+            #print " "
 
-        print " "
-    print "iter,iterMod,AnaCUcores = ",iteration,", ",iterMod,", ", k1_ana_kernel.cores
-    print " "
+        t.cpu_reqs = { 
+                        'processes':min(Kconfig.num_CUs*(iter_cnt+1),RPconfig.PILOTSIZE), #defualt is 1 
+                        'process_type': 'MPI',                                     # default is None, Other option is 'MPI'
+                        'threads_per_process':1                           ,       # default is 1
+                        'thread_type':None                                      # default is Non, Other option is 'OpenMP'
+                      }
 
-    k1_ana_kernel.uses_mpi = True
-        k1_ana_kernel.link_input_data = [shareDir+'/md-{1}_0.gro > md-{1}_0.gro'.format(iterMod,iterMod-1)]
-        for iter in range(1,iterMod+1):
-            for i in range(1,Kconfig.num_CUs+1):        
-                k1_ana_kernel.link_input_data = k1_ana_kernel.link_input_data + [shareDir+'/md-{2}_{3}.xtc > md-{2}_{3}.xtc'.format(iter,i,iter-1,i-1)]
+        t.pre_exec = [
+                        "module use --append /projects/sciteam/gkd/modules",
+                        "module load openmpi",
+                        "module load bwpy",
+                        "source /projects/sciteam/gkd/virtenvs/coco/20151210-DYN/bin/activate",
+                        "export PATH=$PATH:/projects/sciteam/gkd/virtenvs/coco/20151210-DYN/bin",
+                        "export PYTHONPATH=$PYTHONPATH:/projects/sciteam/gkd/virtenvs/coco/20151210-DYN/lib/python-2.7/site-packages",
+                        "export PREFIX_PATH='/projects/sciteam/gkd/virtenvs/coco/20151210-DYN'",
+                        "export LD_LIBRARY_PATH=$PREFIX_PATH/lib:$LD_LIBRARY_PATH"
+                      ]
+        t.executable = ["pyCoCo"]
+
+
+        #k1_ana_kernel.arguments = ["--grid={0}".format(Kconfig.grid),
+        #                           "--dims={0}".format(Kconfig.dims),
+        #                           "--frontpoints={0}".format(Kconfig.num_CUs),
+        #                           "--topfile=md-{0}_0.gro".format(iterMod-1),
+        #                           "--mdfile=*.xtc",
+        #                           "--output={0}_{1}_.gro".format(outbase,iterMod-1),
+        #                           "--atom_selection={0}".format(Kconfig.sel)]
+
+        t.arguments = [ "--grid={0}".format(Kconfig.grid),
+                        "--dims={0}".format(Kconfig.dims),
+                        "--frontpoints={0}".format(Kconfig.num_CUs),
+                        "--topfile=md-{0}_0.gro".format(iterMod-1),
+                        "--mdfile=*.xtc",
+                        "--output={0}_{1}_.gro".format(outbase,iterMod-1),
+                        "--atom_selection={0}".format(Kconfig.sel)]
+
+
+        # Question - Vivek - Below is cp from coco.py. I see there is an option for "uses_mpi"
+        # in the coco.py file. how do I specify that in the kernel here? or do I use the t.cpu_reserve option?
+        # I am pretty sure I can just use the t.cpu_reqs settings to take care off it but wanted to be sure. 
+
+        #"ncsa.bw":
+        #{
+        #    "environment"   : {"FOO": "bar"},
+        #    "pre_exec"      : [
+        #                         "module use --append /projects/sciteam/gkd/modules",
+        #                         "module load openmpi",
+        #                         "module load bwpy",
+        #                         "source /projects/sciteam/gkd/virtenvs/coco/20151210-DYN/bin/activate",
+        #                         "export PATH=$PATH:/projects/sciteam/gkd/virtenvs/coco/20151210-DYN/bin",
+        #                         "export PYTHONPATH=$PYTHONPATH:/projects/sciteam/gkd/virtenvs/coco/20151210-DYN/lib/python-2.7/site-packages",
+        #                         "export PREFIX_PATH='/projects/sciteam/gkd/virtenvs/coco/20151210-DYN'",
+        #                         "export LD_LIBRARY_PATH=$PREFIX_PATH/lib:$LD_LIBRARY_PATH"],
+        #    "executable"    : "pyCoCo",
+        #    "uses_mpi"      : True
+        #},
+
+        #k1_ana_kernel.uses_mpi = True
         
+        #k1_ana_kernel.link_input_data = [shareDir+'/md-{1}_0.gro > md-{1}_0.gro'.format(iterMod,iterMod-1)]
+        t.link_input_data = [shareDir+'/md-{1}_0.gro > md-{1}_0.gro'.format(iter_cnt+1,iter_cnt)] 
+        
+        #for iter in range(1,iterMod+1):
+        # NOTE - check iter_cnt +2 here bec iterMod-1 = iter_cnt
+        for iter in range(1,iter_cnt+2):
+            for i in range(1,Kconfig.num_CUs+1):
+            #for i in range(1,Kconfig.num_CUs+1):        
+                #k1_ana_kernel.link_input_data = k1_ana_kernel.link_input_data + [shareDir+'/md-{2}_{3}.xtc > md-{2}_{3}.xtc'.format(iter,i,iter-1,i-1)]
+                t.link_input_data = t.link_input_data + [shareDir+'/md-{1}_{2}.xtc > md-{1}_{2}.xtc'.format(iter-1,i-1)]
                 
         k1_ana_kernel.copy_output_data = []
+        t.copy_output_data = []
+
         for i in range(0,Kconfig.num_CUs):
-            #k1_ana_kernel.copy_output_data += ["{0}_{1}_{2}.gro > $SHARED/{0}_{1}_{2}.gro".format(outbase,iterMod-1,i,ext)]
-            k1_ana_kernel.copy_output_data += ["{0}_{1}_{2}.gro > ".format(outbase,iterMod-1,i,ext) +shareDir+"/{0}_{1}_{2}.gro".format(outbase,iterMod-1,i,ext)]
+            #k1_ana_kernel.copy_output_data += ["{0}_{1}_{2}.gro > ".format(outbase,iterMod-1,i,ext) +shareDir+"/{0}_{1}_{2}.gro".format(outbase,iterMod-1,i,ext)]
+            t.copy_output_data += ["{0}_{1}_{2}.gro > ".format(outbase,iter_cnt,i,ext) +shareDir+"/{0}_{1}_{2}.gro".format(outbase,iter_cnt,i,ext)]
 
-
-        k1_ana_kernel.download_output_data = ["coco.log > output/coco-iter{0}.log".format(iterMod-1)]   
+        #k1_ana_kernel.download_output_data = ["coco.log > output/coco-iter{0}.log".format(iterMod-1)]
+        t.download_output_data = ["coco.log > output/coco-iter{0}.log".format(iter_cnt)]   
         
+        s9.add_tasks(t)
 
-        return [k1_ana_kernel]
-        
-    def post_loop(self):
-        pass
+        p.add_stages(s9)
+
+    return p
 
 
 if __name__ == '__main__':
