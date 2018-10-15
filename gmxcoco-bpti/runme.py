@@ -62,7 +62,7 @@ def generate_pipeline(index, iterations, ensemble_size):
                     #            'thread_type':OpenMP                                      # default is Non, Other option is 'OpenMP'
                      #           }
     # Question - Vivek - Kconfig
-    md_stage_core_settings = { 'processes':Kconfig.num_cores_per_sim_cu/32,'process_type': MPI, 'threads_per_process':32,'thread_type':OpenMP }    
+    md_stage_core_settings = { 'processes':Kconfig.num_cores_per_sim_cu/32,'process_type':None, 'threads_per_process':32,'thread_type':None }    
 
     for iter_cnt in range(prev_sim_last_iter_to_use, total_iterations):
 
@@ -78,7 +78,7 @@ def generate_pipeline(index, iterations, ensemble_size):
 
                 # Create a Task object
                 t = Task()
-                t.name = 'grompp-task-%s'%t_cnt
+                t.name = 'grompp-task-%s' %t_cnt
 
                 t.cpu_reqs = md_stage_core_settings  
 
@@ -127,7 +127,7 @@ def generate_pipeline(index, iterations, ensemble_size):
 
                 #Create a Task Object
                 t = Task()
-                t.name = 's2-task-%s'%t_cnt
+                t.name = 's2-task-%s' %t_cnt
 
                 t.cpu_reqs = md_stage_core_settings
 
@@ -161,8 +161,8 @@ def generate_pipeline(index, iterations, ensemble_size):
             s3.name = 'grompp-stage-%s'%iter_cnt
 
             for t_cnt in range(ensemble_size):
-                t = task()
-                t.name = 'grompp-task-%s't_cnt
+                t = Task()
+                t.name = 'grompp-task-%s'%t_cnt
 
                 t.cpu_reqs = md_stage_core_settings
 
@@ -206,7 +206,7 @@ def generate_pipeline(index, iterations, ensemble_size):
             s4.name = 'mdrun-stage-%s'%iter_cnt
 
             for t_cnt in range(ensemble_size):
-                t = task()
+                t = Task()
                 t.name = 'mdrun-task-%s'%t_cnt
 
                 t.cpu_reqs = md_stage_core_settings
@@ -239,7 +239,7 @@ def generate_pipeline(index, iterations, ensemble_size):
 
             t.cpu_reqs = md_stage_core_settings
 
-            k5_prep_sim_kernel.link_input_data = [shareDir+'/{0}'.format(os.path.basename(Kconfig.grompp_3_mdp)),
+            t.link_input_data = [shareDir+'/{0}'.format(os.path.basename(Kconfig.grompp_3_mdp)),
                                              shareDir+'/{0}'.format(os.path.basename(Kconfig.top_file))]
             
             # Same pre_exec as in the kernel def files for the specific target resource
@@ -344,7 +344,7 @@ def generate_pipeline(index, iterations, ensemble_size):
         s7.name = 'traj-stage-%s'%iter_cnt
         
         for t_cnt in range(ensemble_size):
-            t = task()
+            t = Task()
             t.name = 'traj-task-%s'%t_cnt
 
             t.cpu_reqs = md_stage_core_settings
@@ -374,7 +374,7 @@ def generate_pipeline(index, iterations, ensemble_size):
 
 
             #k7_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.gro > $SHARED/md-{0}_{1}.gro".format(iterMod-1,instance-1)]        
-            k7_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.gro > ".format(iter_cnt,t_cnt) +shareDir+"/md-{0}_{1}.gro".format(iter_cnt,t_cnt)]       
+            #k7_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.gro > ".format(iter_cnt,t_cnt) +shareDir+"/md-{0}_{1}.gro".format(iter_cnt,t_cnt)]       
             t.copy_output_data = ["md-{0}_{1}_whole.gro > ".format(iter_cnt,t_cnt) +shareDir+"/md-{0}_{1}.gro".format(iter_cnt,t_cnt)]
             s7.add_tasks(t)
 
@@ -383,7 +383,7 @@ def generate_pipeline(index, iterations, ensemble_size):
 
         #KERNEL / STAGE 8 
         s8 = Stage()
-        s8.name = 'trajconv-stage-%s'iter_cnt
+        s8.name = 'trajconv-stage-%s'%iter_cnt
 
         for t_cnt in range(ensemble_size):
             t = Task()
@@ -394,8 +394,8 @@ def generate_pipeline(index, iterations, ensemble_size):
             #k8_sim_kernel.link_input_data = [shareDir+"/md-{0}_{1}.xtc > md-{0}_{1}.xtc".format(iterMod-1,instance-1),
             #                              shareDir+"/md-{0}_{1}.tpr > md-{0}_{1}.tpr".format(iterMod-1,instance-1)]
             
-            t.link_input_data = [shareDir+"/md-{0}_{1}.xtc > md-{0}_{1}.xtc".format(iterMod-1,instance-1),
-                                          shareDir+"/md-{0}_{1}.tpr > md-{0}_{1}.tpr".format(iterMod-1,instance-1)]
+            t.link_input_data = [shareDir+"/md-{0}_{1}.xtc > md-{0}_{1}.xtc".format(iter_cnt,t_cnt),
+                                          shareDir+"/md-{0}_{1}.tpr > md-{0}_{1}.tpr".format(iter_cnt,t_cnt)]
 
             #k8_sim_kernel.arguments = ["--echo=System",
             #                           "--f=md-{0}_{1}.xtc".format(iterMod-1,instance-1),
@@ -464,7 +464,7 @@ def generate_pipeline(index, iterations, ensemble_size):
         # NOTE this analysis step is done using only ONE TASK ( cores can increase )
         # so there will be no for loop for tasks like other kernels
 
-        t = task()
+        t = Task()
         t.name = 'analysis-task-1'
 
         # need to set it so that the single analysis task uses only as many cores as there are files to input
@@ -508,9 +508,9 @@ def generate_pipeline(index, iterations, ensemble_size):
         t.arguments = [ "--grid={0}".format(Kconfig.grid),
                         "--dims={0}".format(Kconfig.dims),
                         "--frontpoints={0}".format(Kconfig.num_CUs),
-                        "--topfile=md-{0}_0.gro".format(iterMod-1),
+                        "--topfile=md-{0}_0.gro".format(iter_cnt),
                         "--mdfile=*.xtc",
-                        "--output={0}_{1}_.gro".format(outbase,iterMod-1),
+                        "--output={0}_{1}_.gro".format(outbase,iter_cnt),
                         "--atom_selection={0}".format(Kconfig.sel)]
 
 
@@ -545,9 +545,9 @@ def generate_pipeline(index, iterations, ensemble_size):
             for i in range(1,Kconfig.num_CUs+1):
             #for i in range(1,Kconfig.num_CUs+1):        
                 #k1_ana_kernel.link_input_data = k1_ana_kernel.link_input_data + [shareDir+'/md-{2}_{3}.xtc > md-{2}_{3}.xtc'.format(iter,i,iter-1,i-1)]
-                t.link_input_data = t.link_input_data + [shareDir+'/md-{1}_{2}.xtc > md-{1}_{2}.xtc'.format(iter-1,i-1)]
+                t.link_input_data = t.link_input_data + [shareDir+'/md-{0}_{1}.xtc > md-{0}_{1}.xtc'.format(iter-1,i-1)]
                 
-        k1_ana_kernel.copy_output_data = []
+        #k1_ana_kernel.copy_output_data = []
         t.copy_output_data = []
 
         for i in range(0,Kconfig.num_CUs):
