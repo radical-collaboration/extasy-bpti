@@ -64,6 +64,13 @@ def generate_pipeline(index, iterations, ensemble_size):
     # Question - Vivek - Kconfig
    # md_stage_core_settings = { 'processes':Kconfig.num_cores_per_sim_cu/32,'process_type':'MPI', 'threads_per_process':32,'thread_type':'OpenMP'}    
     md_stage_core_settings = { 'processes':32,'process_type':'MPI', 'threads_per_process':32,'thread_type':'OpenMP'}
+    sim_pre_exec = [    "export PATH=$PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/bin",
+                        "export GROMACS_LIB=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/lib64",
+                        "export GROMACS_INC=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/include",
+                        "export GROMACS_BIN=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/bin",
+                        "export GROMACS_DIR=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu",
+                        "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/lib64"]
+
     for iter_cnt in range(prev_sim_last_iter_to_use, total_iterations):
 
         if iter_cnt != 0:
@@ -83,12 +90,7 @@ def generate_pipeline(index, iterations, ensemble_size):
                 t.cpu_reqs = md_stage_core_settings  
 
                 # Same pre_exec as in the kernel def files for the specific target resource
-                t.pre_exec = [  "export PATH=$PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/bin",
-                                "export GROMACS_LIB=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/lib64",
-                                "export GROMACS_INC=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/include",
-                                "export GROMACS_BIN=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/bin",
-                                "export GROMACS_DIR=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu",
-                                "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/lib64"]
+                t.pre_exec = sim_pre_exec
 
                 # Same executable as in the kernel def files for the specific target resource                                
                 t.executable = ["gmx grompp"]
@@ -132,12 +134,7 @@ def generate_pipeline(index, iterations, ensemble_size):
                 t.cpu_reqs = md_stage_core_settings
 
                 # Same pre_exec as in k def files for specific target resources 
-                t.pre_exec = ["export PATH=$PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/bin",
-                              "export GROMACS_LIB=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/lib64",
-                              "export GROMACS_INC=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/include",
-                              "export GROMACS_BIN=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/bin",
-                              "export GROMACS_DIR=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu",
-                              "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/lib64"]
+                t.pre_exec = sim_pre_exec
                 t.executable = ["gmx_mpi mdrun"] 
 
                 # Number of cores for non-mpi Gromacs
@@ -164,7 +161,11 @@ def generate_pipeline(index, iterations, ensemble_size):
                 t = Task()
                 t.name = 'grompp-task-%s'%t_cnt
 
+                t.pre_exec = sim_pre_exec
                 t.cpu_reqs = md_stage_core_settings
+
+                # Same executable as in the kernel def files for the specific target resource                                
+                t.executable = ["gmx grompp"]
 
                 #k3_prep_eq_kernel.link_input_data = [shareDir+'/{0}'.format(os.path.basename(Kconfig.grompp_2_mdp)),
                 #                                     shareDir+'/{0}'.format(os.path.basename(Kconfig.top_file)),
@@ -209,7 +210,10 @@ def generate_pipeline(index, iterations, ensemble_size):
                 t = Task()
                 t.name = 'mdrun-task-%s'%t_cnt
 
+                t.pre_exec = sim_pre_exec
                 t.cpu_reqs = md_stage_core_settings
+
+                t.executable = ["gmx_mpi mdrun"]
 
                 #k4_eq_kernel.link_input_data = [shareDir+'/eq-{0}_{1}.tpr > eq-{0}_{1}.tpr'.format(iterMod-1,instance-1)]
                 t.link_input_data = [shareDir+'/eq-{0}_{1}.tpr > eq-{0}_{1}.tpr'.format(iter_cnt,t_cnt)]
@@ -243,12 +247,7 @@ def generate_pipeline(index, iterations, ensemble_size):
                                              shareDir+'/{0}'.format(os.path.basename(Kconfig.top_file))]
             
             # Same pre_exec as in the kernel def files for the specific target resource
-            t.pre_exec = [  "export PATH=$PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/bin",
-                            "export GROMACS_LIB=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/lib64",
-                            "export GROMACS_INC=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/include",
-                            "export GROMACS_BIN=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/bin",
-                            "export GROMACS_DIR=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu",
-                            "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/lib64"]
+            t.pre_exec = sim_pre_exec
             # Same executable as in the kernel def files for the specific target resource                                
             t.executable = ["gmx grompp"]
             
@@ -312,12 +311,7 @@ def generate_pipeline(index, iterations, ensemble_size):
             t.cpu_reqs = md_stage_core_settings
 
             # Same pre_exec as in k def files for specific target resources 
-            t.pre_exec = ["export PATH=$PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/bin",
-                          "export GROMACS_LIB=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/lib64",
-                          "export GROMACS_INC=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/include",
-                          "export GROMACS_BIN=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/bin",
-                          "export GROMACS_DIR=/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu",
-                          "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210_OMPI20151210-DYN/install-cpu/lib64"]
+            t.pre_exec = sim_pre_exec
             t.executable = ["gmx_mpi mdrun"] 
 
             # Number of cores for non-mpi Gromacs
@@ -355,12 +349,7 @@ def generate_pipeline(index, iterations, ensemble_size):
             t.link_input_data = [shareDir+"/md-{0}_{1}.gro > md-{0}_{1}.gro".format(iter_cnt,t_cnt),
                                              shareDir+"/md-{0}_{1}.tpr > md-{0}_{1}.tpr".format(iter_cnt,t_cnt)]
 
-            t.pre_exec = ["export PATH=$PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/bin",
-                                "export GROMACS_LIB=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/lib64",
-                                "export GROMACS_INC=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/include",
-                                "export GROMACS_BIN=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/bin",
-                                "export GROMACS_DIR=/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu",
-                                "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/lib64"]
+            t.pre_exec = sim_pre_exec
             t.executable = ["/bin/bash"]
 
             #k7_sim_kernel.arguments = ["--echo=System",
@@ -390,12 +379,15 @@ def generate_pipeline(index, iterations, ensemble_size):
             t.name = 'traj-task-%s'%t_cnt
 
             t.cpu_reqs = md_stage_core_settings
+            t.pre_exec = sim_pre_exec
+            t.executable = ["/bin/bash"]
 
             #k8_sim_kernel.link_input_data = [shareDir+"/md-{0}_{1}.xtc > md-{0}_{1}.xtc".format(iterMod-1,instance-1),
             #                              shareDir+"/md-{0}_{1}.tpr > md-{0}_{1}.tpr".format(iterMod-1,instance-1)]
             
             t.link_input_data = [shareDir+"/md-{0}_{1}.xtc > md-{0}_{1}.xtc".format(iter_cnt,t_cnt),
                                           shareDir+"/md-{0}_{1}.tpr > md-{0}_{1}.tpr".format(iter_cnt,t_cnt)]
+
 
             #k8_sim_kernel.arguments = ["--echo=System",
             #                           "--f=md-{0}_{1}.xtc".format(iterMod-1,instance-1),
