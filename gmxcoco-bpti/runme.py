@@ -62,8 +62,8 @@ def generate_pipeline(index, iterations, ensemble_size):
                     #            'thread_type':OpenMP                                      # default is Non, Other option is 'OpenMP'
                      #           }
     # Question - Vivek - Kconfig
-    md_stage_core_settings = { 'processes':Kconfig.num_cores_per_sim_cu/32,'process_type':None, 'threads_per_process':32,'thread_type':None }    
-
+   # md_stage_core_settings = { 'processes':Kconfig.num_cores_per_sim_cu/32,'process_type':'MPI', 'threads_per_process':32,'thread_type':'OpenMP'}    
+    md_stage_core_settings = { 'processes':32,'process_type':'MPI', 'threads_per_process':32,'thread_type':'OpenMP'}
     for iter_cnt in range(prev_sim_last_iter_to_use, total_iterations):
 
         if iter_cnt != 0:
@@ -478,9 +478,9 @@ def generate_pipeline(index, iterations, ensemble_size):
             #print " "
 
         t.cpu_reqs = { 
-                        'processes':min(Kconfig.num_CUs*(iter_cnt+1),RPconfig.PILOTSIZE), #defualt is 1 
+                        'processes': int(min(Kconfig.num_CUs*(iter_cnt+1),RPconfig.PILOTSIZE)) , #defualt is 1 
                         'process_type': 'MPI',                                     # default is None, Other option is 'MPI'
-                        'threads_per_process':1                           ,       # default is 1
+                        'threads_per_process': 1                           ,       # default is 1
                         'thread_type':None                                      # default is Non, Other option is 'OpenMP'
                       }
 
@@ -623,7 +623,8 @@ if __name__ == '__main__':
         # Note: The list order is not guaranteed to be preserved
         #def generate_pipeline(index, iterations, ensemble_size):
 	extasy_pipeline = generate_pipeline(1,Kconfig.num_iterations,Kconfig.num_CUs)
-        appman.workflow = [extasy_pipeline]
+        
+	appman.workflow = set([extasy_pipeline])
 
         # Run the Application Manager
         appman.run()
