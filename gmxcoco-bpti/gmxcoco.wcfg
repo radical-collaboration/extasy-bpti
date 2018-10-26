@@ -3,14 +3,14 @@ Simulator 	=  'Gromacs'       # Simulator to be loaded
 analyzer        = 'CoCo'           # Analyzer to be loaded
 
 #-------------------------General------------------------------
-num_iterations 	= 20                # Number of iterations of Simulation-Analysis
+num_iterations 	= 1                # Number of iterations of Simulation-Analysis
 start_iter 	= 0                # Iteration number with which to start
 num_CUs   	= 20                # Number of tasks or Compute Units
-nsave		= 5                # Iterations after which output is 
+nsave		= 1000                # Iterations after which output is 
                                    #transferred to local machine
 
 #------------------------Simulation----------------------------------------
-num_cores_per_sim_cu = 20      # set from 24 to 20 for supermic  Number of cores per Simulation Compute Unit
+num_cores_per_sim_cu = 32      # set from 24 to 20 for supermic  Number of cores per Simulation Compute Unit
 initial_crd_file     = './inp_files/bpti.gro'   # Entire path to Coordinates
                                                 #  file - Do not use $HOME 
                                                 #  or the likes
@@ -26,10 +26,10 @@ grompp_2_mdp 	     = './inp_files/run2.mdp'
 grompp_3_mdp   	     = './inp_files/run3.mdp'   # Entire path to MD Input 
                                                 #  file - Do not use $HOME 
                                                 #  or the likes
-grompp_1_itp_file    = './inp_files/posre_10.itp'  # Entire path to ITP file
+grompp_1_itp_file    = './inp_files/posre_ca_1000.itp'  # Entire path to ITP file
                                                    #  - Do not use $HOME or 
                                                    #  the likes
-grompp_2_itp_file    = './inp_files/posre_100.itp' # Entire path to ITP file
+grompp_2_itp_file    = './inp_files/posre_ca_1000.itp' # Entire path to ITP file
                                                    #  - Do not use $HOME or 
                                                    #  the likes
 
@@ -38,7 +38,7 @@ grid 	= '30'           #  Number of points along each dimension of the
                          #  CoCo histogram
 dims    = '3'            # The number of projections to consider from the 
                          #  input pcz file
-sel     = 'name CA'      # Select the part of the system to be considered 
+sel     = '(name CA) and (resid 1 to 55)'      # Select the part of the system to be considered 
                          #  for coco analysis
 output  = 'coco_out.gro' # Specify base name for the output files where the 
                          #  extension will indicate the format of the output

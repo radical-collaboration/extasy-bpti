@@ -36,7 +36,7 @@ shareDir='$SHARED'
 # References to previous iterations, effects starting iteration of current run
 # prev_sim_last_iter_to_use=48
 # iterMod=iteration+prev_sim_last_iter_to_use
-prev_sim_last_iter_to_use=10
+prev_sim_last_iter_to_use=0
 
 
 # Retrieve basename and extension
