@@ -36,7 +36,7 @@ shareDir='$SHARED'
 # References to previous iterations, effects starting iteration of current run
 # prev_sim_last_iter_to_use=48
 # iterMod=iteration+prev_sim_last_iter_to_use
-prev_sim_last_iter_to_use=0
+prev_sim_last_iter_to_use=10
 
 
 # Retrieve basename and extension
@@ -72,15 +72,17 @@ def generate_pipeline(index, iterations, ensemble_size):
                         "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/sciteam/gkd/gromacs/5.1.1/20151210-NO_MPI/install-cpu/lib64"]
 
     for iter_cnt in range(prev_sim_last_iter_to_use, total_iterations):
+	
+	print "iter_cnt = ", iter_cnt
 
         if iter_cnt != 0:
-
+	    print "iter_cnt inside of if iter_cnt != 0 loop = ", iter_cnt
             
             # STAGE/KERNEL 1
             # Create a Stage object
             s1 = Stage()
             s1.name = 'grompp-stage-%s' %iter_cnt
-
+	    print "s1.name = ", s1.name
             for t_cnt in range(ensemble_size):
 
                 # Create a Task object
@@ -124,6 +126,7 @@ def generate_pipeline(index, iterations, ensemble_size):
             # STAGE/ KERNEL 2
             s2 = Stage()
             s2.name = 'mdrun-stage-%s'%iter_cnt
+	    print "s2.name = ", s2.name
 
             for t_cnt in range(ensemble_size):
 
@@ -156,6 +159,7 @@ def generate_pipeline(index, iterations, ensemble_size):
             # STAGE/ KERNEL 3
             s3 = Stage()
             s3.name = 'grompp-stage-%s'%iter_cnt
+	    print "s3.name = ", s3.name
 
             for t_cnt in range(ensemble_size):
                 t = Task()
@@ -205,6 +209,7 @@ def generate_pipeline(index, iterations, ensemble_size):
             # STAGE/ KERNEL 4
             s4 = Stage()
             s4.name = 'mdrun-stage-%s'%iter_cnt
+	    print "s4.name =",s4.name
 
             for t_cnt in range(ensemble_size):
                 t = Task()
@@ -235,6 +240,7 @@ def generate_pipeline(index, iterations, ensemble_size):
         # STAGE / KERNEL 5 
         s5 = Stage()
         s5.name = 'grompp-stage-%s'%iter_cnt
+	print "s5.name",s5.name 
 
         for t_cnt in range(ensemble_size):
 
@@ -301,6 +307,7 @@ def generate_pipeline(index, iterations, ensemble_size):
 
         s6 = Stage ()
         s6.name = 'mdrun-stage-%s'%iter_cnt
+	print "s6.name = ", s6.name 
 
         for t_cnt in range(ensemble_size):
 
@@ -336,6 +343,7 @@ def generate_pipeline(index, iterations, ensemble_size):
         # STAGE / KERNEL 7 
         s7 = Stage()
         s7.name = 'traj-stage-%s'%iter_cnt
+	print "s7.name = ", s7.name 
         
         for t_cnt in range(ensemble_size):
             t = Task()
@@ -373,7 +381,8 @@ def generate_pipeline(index, iterations, ensemble_size):
         #KERNEL / STAGE 8 
         s8 = Stage()
         s8.name = 'trajconv-stage-%s'%iter_cnt
-
+	print "s8.name = ", s8.name 
+	
         for t_cnt in range(ensemble_size):
             t = Task()
             t.name = 'traj-task-%s'%t_cnt
@@ -437,6 +446,7 @@ def generate_pipeline(index, iterations, ensemble_size):
         
         s9 = Stage()
         s9.name = 'coco-iter-%s'%iter_cnt
+	print "s9.name = ", s9.name 
 
         #shareDir="$SHARED"
         #shareDir="/work/fbettenc/radical.pilot.sandbox/rp.session.js-17-187.jetstream-cloud.org.hal9000.017508.0005-pilot.0000/staging_area"
@@ -553,6 +563,23 @@ def generate_pipeline(index, iterations, ensemble_size):
 
         p.add_stages(s9)
 
+	#dbugger
+	print "p.name =", p.name
+	print " " 
+	print "p.__dict__ =  ",p.__dict__ 
+	print " "
+	print "len(p.__dict__) = ", len(p.__dict__)
+	print " " 
+	print " " 
+	 
+	#print "num p stages = len(p.stages) = ", len(p.stages)
+	#print "p.stages.name(s1)", p.stages.name(1)
+	#print "p.stages.name = ", p.stages.name
+	#for i in p.stages:
+	#	print i 
+	#	print "p.stages(%s).name = "%i, p.stages(i).name
+	#print "print p.stages = ", p.stages
+	#print "p dict is = ", p.__dict__
     return p
 
 
@@ -614,9 +641,61 @@ if __name__ == '__main__':
         # Assign the workflow as a set or list of Pipelines to the Application Manager
         # Note: The list order is not guaranteed to be preserved
         #def generate_pipeline(index, iterations, ensemble_size):
-	extasy_pipeline = generate_pipeline(1,Kconfig.num_iterations,Kconfig.num_CUs)
+
+
+	#print "extasy_pipeline.__dict__ before extasy_pipeline call", extasy_pipeline.__dict__
+
+	extasy_pipeline = generate_pipeline("0",Kconfig.num_iterations,Kconfig.num_CUs)
         
+	# debugger 
+	print " extasy_pipeline = generate_pipeline(1,Kconfig.num_iterations,Kconfig.num_CUs) Call has been made!"
+
+ 
+	#debugger 
+	print " " 
+	print "extasy_pipeline.__dict__"
+	print " "
+	print  extasy_pipeline.__dict__
+	print " "
+	#print "extasy_pipeline.stages.__dict__",extasy_pipeline.stages
+	print " "
+	print " "
+
+        #dbugger
+        print "num extasy_pipeline stages = len(ext_pip.stages) = ", len(extasy_pipeline.stages)
+        #print "ext_pipeline.stages(s1).name(s1)", extasy_pipeline.stages("s1")
+        #print "extasy_pipeline.stages.name = ", extasy_pipeline.stages.name
+        #for i in extasy_pipeline.stages:
+        #       print i 
+        #       print "extasy_pipeline.stages(%s).name = "%i, extasy_pipeline.stages(i).name
+	print " " 
+        print "print extasy_pipeline.stages = ", extasy_pipeline.stages
+	print " " 
+	print " " 
+        print "extasy_pipeline dict is = ", extasy_pipeline.__dict__
+	print " "
+
+        #debugger
+	print " " 
+        print "appman.__dict__ before appman.workflow = set([wf])"
+	print " " 
+	print  appman.__dict__
+        print " "
+        print " "
+	print " " 
+
+
 	appman.workflow = set([extasy_pipeline])
+
+	#debugger 
+	print " " 
+	print " appman.__dict__ after appman.workflow = set([extasy_pipeline])"
+	print " " 
+	print appman.__dict__
+	print " "
+	print " " 
+	print " " 
+
 
         # Run the Application Manager
         appman.run()
