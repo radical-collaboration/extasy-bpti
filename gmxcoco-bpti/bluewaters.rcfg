@@ -1,7 +1,7 @@
 REMOTE_HOST = 'ncsa.bw_aprun'   # Label/Name of the Remote Machine
 UNAME       = 'bettenco'  # Username on the Remote Machine
 ALLOCATION  = 'bamm'       # Allocation to be charged
-WALLTIME    = 30          # Walltime to be requested for the pilot
+WALLTIME    = 60          # Walltime to be requested for the pilot
 PILOTSIZE   = 160        # Number of cores to be reserved
 WORKDIR     = None        # Working directory on the remote machine
 QUEUE       = 'high'    # Name of the queue in the remote machine

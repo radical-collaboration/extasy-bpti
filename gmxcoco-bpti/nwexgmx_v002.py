@@ -42,7 +42,7 @@ get_engine().add_kernel_plugin(kernel_coco)
 # ------------------------------------------------------------------------------
 #
 
-class Extasy_CocoGromacs_Static(SimulationAnalysisLoop):            
+class Extasy_CocoGromacs_Static(SimulationAnalysisLoop):
 
     def __init__(self, maxiterMods, simulation_instances, analysis_instances):
         SimulationAnalysisLoop.__init__(self, maxiterMods, simulation_instances, analysis_instances)
@@ -53,28 +53,28 @@ class Extasy_CocoGromacs_Static(SimulationAnalysisLoop):
     def simulation_stage(self, iteration, instance):
 
 	#shareDir="$SHARED"
-	#shareDir="staging://" # $SHARED is place holder and is replaced at runtime by "staging://" 
-		#https://github.com/radical-cybertools/radical.entk/blob/master/src/radical/entk/execution_plugin/staging/placeholders.py#L25	
-        #shareDir="/work/fbettenc/radical.pilot.sandbox/p13b01_left_d3_k12_1000_k34_1000" 
+	#shareDir="staging://" # $SHARED is place holder and is replaced at runtime by "staging://"
+		#https://github.com/radical-cybertools/radical.entk/blob/master/src/radical/entk/execution_plugin/staging/placeholders.py#L25
+        #shareDir="/work/fbettenc/radical.pilot.sandbox/p13b01_left_d3_k12_1000_k34_1000"
 		# note tried without / before work and failed. diff err for /work/.. than work/..
 	#shareDir="/work/fbettenc/radical.pilot.sandbox/rp.session.js-17-187.jetstream-cloud.org.hal9000.017508.0005-pilot.0000/staging_area"
         shareDir="/work/fbettenc/p14b01_pool/staging_area"
 	prev_sim_last_iter_to_use=48
 	iterMod=iteration+prev_sim_last_iter_to_use
-	
+
 	kernel_list = []
-        
+
         outbase, ext = os.path.basename(Kconfig.output).split('.')
         if ext == '':
             ext = '.pdb'
-		
+
 
         if ((iterMod-1)!=0):
             k1_prep_min_kernel = Kernel(name="custom.grompp")
             k1_prep_min_kernel.link_input_data = [shareDir+'/{0}'.format(os.path.basename(Kconfig.grompp_1_mdp)),
                                                   shareDir+'/{0}'.format(os.path.basename(Kconfig.top_file)),
                                                   shareDir+'/{0}'.format(os.path.basename(Kconfig.restr_file)),
-                                                  shareDir+'/{0}'.format(os.path.basename(Kconfig.grompp_1_itp_file))]			
+                                                  shareDir+'/{0}'.format(os.path.basename(Kconfig.grompp_1_itp_file))]
             #k1_prep_min_kernel.link_input_data = k1_prep_min_kernel.link_input_data + ['$PREV_ANALYSIS_INSTANCE_1/{0}_{1}_{2}.{3} > {0}_{1}_{2}.{3}'.format(outbase,iterMod-2,instance-1,ext)]
             k1_prep_min_kernel.link_input_data = k1_prep_min_kernel.link_input_data + [shareDir+'/{0}_{1}_{2}.{3} > {0}_{1}_{2}.{3}'.format(outbase,iterMod-2,instance-1,ext)]
 
@@ -85,10 +85,10 @@ class Extasy_CocoGromacs_Static(SimulationAnalysisLoop):
                                             "--gro={0}".format(os.path.basename(Kconfig.restr_file)),
                                             #"--gro={0}_{1}_{2}.{3}".format(outbase,iterMod-2,instance-1,ext),
                                             "--tpr=min-{0}_{1}.tpr".format(iterMod-1,instance-1)]
-            #k1_prep_min_kernel.copy_output_data = ['min-{0}_{1}.tpr > $SHARED/min-{0}_{1}.tpr'.format(iterMod-1,instance-1)]    
+            #k1_prep_min_kernel.copy_output_data = ['min-{0}_{1}.tpr > $SHARED/min-{0}_{1}.tpr'.format(iterMod-1,instance-1)]
             k1_prep_min_kernel.copy_output_data = ['min-{0}_{1}.tpr > '.format(iterMod-1,instance-1) +shareDir+'/min-{0}_{1}.tpr'.format(iterMod-1,instance-1)]
             kernel_list.append(k1_prep_min_kernel)
-            
+
             k2_min_kernel = Kernel(name="custom.mdrun")
             k2_min_kernel.link_input_data = [shareDir+'/min-{0}_{1}.tpr > min-{0}_{1}.tpr'.format(iterMod-1,instance-1)]
             k2_min_kernel.cores = Kconfig.num_cores_per_sim_cu
@@ -97,14 +97,14 @@ class Extasy_CocoGromacs_Static(SimulationAnalysisLoop):
             k2_min_kernel.copy_output_data = ['min-{0}_{1}.gro >'.format(iterMod-1,instance-1) +shareDir+'/min-{0}_{1}.gro'.format(iterMod-1,instance-1)]
 
             kernel_list.append(k2_min_kernel)
-            
+
             k3_prep_eq_kernel = Kernel(name="custom.grompp")
             k3_prep_eq_kernel.link_input_data = [shareDir+'/{0}'.format(os.path.basename(Kconfig.grompp_2_mdp)),
                                                  shareDir+'/{0}'.format(os.path.basename(Kconfig.top_file)),
                                                  shareDir+'/{0}'.format(os.path.basename(Kconfig.restr_file)),
                                                  shareDir+'/{0}'.format(os.path.basename(Kconfig.grompp_2_itp_file))]
             k3_prep_eq_kernel.link_input_data = k3_prep_eq_kernel.link_input_data + [shareDir+'/min-{0}_{1}.gro > min-{0}_{1}.gro'.format(iterMod-1,instance-1)]
-            #k3_prep_eq_kernel.link_input_data = k3_prep_eq_kernel.link_input_data + ['$PREV_ANALYSIS_INSTANCE_1/{0}_{1}_{2}.{3} > {0}_{1}_{2}.{3}'.format(outbase,iterMod-2,instance-1,ext)] 
+            #k3_prep_eq_kernel.link_input_data = k3_prep_eq_kernel.link_input_data + ['$PREV_ANALYSIS_INSTANCE_1/{0}_{1}_{2}.{3} > {0}_{1}_{2}.{3}'.format(outbase,iterMod-2,instance-1,ext)]
             k3_prep_eq_kernel.link_input_data = k3_prep_eq_kernel.link_input_data + [shareDir+'/{0}_{1}_{2}.{3} > {0}_{1}_{2}.{3}'.format(outbase,iterMod-2,instance-1,ext)]
             k3_prep_eq_kernel.arguments = ["--mdp={0}".format(os.path.basename(Kconfig.grompp_2_mdp)),
                                            "--ref={0}_{1}_{2}.{3}".format(outbase,iterMod-2,instance-1,ext),
@@ -127,7 +127,7 @@ class Extasy_CocoGromacs_Static(SimulationAnalysisLoop):
             k4_eq_kernel.copy_output_data = ['eq-{0}_{1}.gro > '.format(iterMod-1,instance-1) +shareDir+'/eq-{0}_{1}.gro'.format(iterMod-1,instance-1)]
 
             kernel_list.append(k4_eq_kernel)
-            
+
         k5_prep_sim_kernel = Kernel(name="custom.grompp")
         k5_prep_sim_kernel.link_input_data = [shareDir+'/{0}'.format(os.path.basename(Kconfig.grompp_3_mdp)),
                                              shareDir+'/{0}'.format(os.path.basename(Kconfig.top_file))]
@@ -136,18 +136,18 @@ class Extasy_CocoGromacs_Static(SimulationAnalysisLoop):
             k5_prep_sim_kernel.arguments = ["--mdp={0}".format(os.path.basename(Kconfig.grompp_3_mdp)),
                                            "--gro={0}".format(os.path.basename(Kconfig.initial_crd_file)),
                                            "--top={0}".format(os.path.basename(Kconfig.top_file)),
-                                           "--tpr=md-{0}_{1}.tpr".format(iterMod-1,instance-1)]  
+                                           "--tpr=md-{0}_{1}.tpr".format(iterMod-1,instance-1)]
         else:
             k5_prep_sim_kernel.link_input_data =  k5_prep_sim_kernel.link_input_data + [shareDir+'/eq-{0}_{1}.gro > eq-{0}_{1}.gro'.format(iterMod-1,instance-1)]
             k5_prep_sim_kernel.arguments = ["--mdp={0}".format(os.path.basename(Kconfig.grompp_3_mdp)),
                                            "--gro=eq-{0}_{1}.gro".format(iterMod-1,instance-1),
                                            "--top={0}".format(os.path.basename(Kconfig.top_file)),
-                                           "--tpr=md-{0}_{1}.tpr".format(iterMod-1,instance-1)]             
-        #k5_prep_sim_kernel.copy_output_data = ['md-{0}_{1}.tpr > $SHARED/md-{0}_{1}.tpr'.format(iterMod-1,instance-1)]        
+                                           "--tpr=md-{0}_{1}.tpr".format(iterMod-1,instance-1)]
+        #k5_prep_sim_kernel.copy_output_data = ['md-{0}_{1}.tpr > $SHARED/md-{0}_{1}.tpr'.format(iterMod-1,instance-1)]
         k5_prep_sim_kernel.copy_output_data = ['md-{0}_{1}.tpr > '.format(iterMod-1,instance-1) + shareDir +'/md-{0}_{1}.tpr'.format(iterMod-1,instance-1)]
 
         kernel_list.append(k5_prep_sim_kernel)
-        
+
         k6_sim_kernel = Kernel(name="custom.mdrun")
         k6_sim_kernel.link_input_data = [shareDir+'/md-{0}_{1}.tpr > md-{0}_{1}.tpr'.format(iterMod-1,instance-1)]
         k6_sim_kernel.cores = Kconfig.num_cores_per_sim_cu
@@ -168,10 +168,10 @@ class Extasy_CocoGromacs_Static(SimulationAnalysisLoop):
                                    "--s=md-{0}_{1}.tpr".format(iterMod-1,instance-1),
                                    "--o=md-{0}_{1}_whole.gro".format(iterMod-1,instance-1),
                                    "--pbc=whole"]
-        #k7_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.gro > $SHARED/md-{0}_{1}.gro".format(iterMod-1,instance-1)]        
-        k7_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.gro > ".format(iterMod-1,instance-1) +shareDir+"/md-{0}_{1}.gro".format(iterMod-1,instance-1)]        
+        #k7_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.gro > $SHARED/md-{0}_{1}.gro".format(iterMod-1,instance-1)]
+        k7_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.gro > ".format(iterMod-1,instance-1) +shareDir+"/md-{0}_{1}.gro".format(iterMod-1,instance-1)]
 
-        kernel_list.append(k7_sim_kernel)              
+        kernel_list.append(k7_sim_kernel)
 
         k8_sim_kernel = Kernel(name="custom.trjconv")
         #k8_sim_kernel.link_input_data = ["$SHARED/md-{0}_{1}.xtc > md-{0}_{1}.xtc".format(iterMod-1,instance-1),
@@ -185,21 +185,21 @@ class Extasy_CocoGromacs_Static(SimulationAnalysisLoop):
                                    "--o=md-{0}_{1}_whole.xtc".format(iterMod-1,instance-1),
                                    "--pbc=whole"]
         if(iterMod%Kconfig.nsave==0):
-            k8_sim_kernel.download_output_data = ["md-{0}_{1}_whole.xtc > output/iter{0}/md-{0}_{1}_whole.xtc".format(iterMod-1,instance-1)]	        
-        #k8_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.xtc > $SHARED/md-{0}_{1}.xtc".format(iterMod-1,instance-1)]        
-        k8_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.xtc > ".format(iterMod-1,instance-1) +shareDir+"/md-{0}_{1}.xtc".format(iterMod-1,instance-1)]        
+            k8_sim_kernel.download_output_data = ["md-{0}_{1}_whole.xtc > output/iter{0}/md-{0}_{1}_whole.xtc".format(iterMod-1,instance-1)]
+        #k8_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.xtc > $SHARED/md-{0}_{1}.xtc".format(iterMod-1,instance-1)]
+        k8_sim_kernel.copy_output_data = ["md-{0}_{1}_whole.xtc > ".format(iterMod-1,instance-1) +shareDir+"/md-{0}_{1}.xtc".format(iterMod-1,instance-1)]
 
-        kernel_list.append(k8_sim_kernel)              
+        kernel_list.append(k8_sim_kernel)
 
-        
+
         return kernel_list
-        
+
 
     def analysis_stage(self, iteration, instance):
         '''
         function : Perform CoCo Analysis on the output of the simulation from the current iterMod. Using the .xtc
-         files generated in all instances, generate .gro files (as many as the num_CUs) to be used in the next simulations. 
-        
+         files generated in all instances, generate .gro files (as many as the num_CUs) to be used in the next simulations.
+
 
         coco :-
 
@@ -224,8 +224,8 @@ class Extasy_CocoGromacs_Static(SimulationAnalysisLoop):
 
         outbase, ext = os.path.basename(Kconfig.output).split('.')
         if ext == '':
-            ext = '.pdb'        
-        
+            ext = '.pdb'
+
         k1_ana_kernel.arguments = ["--grid={0}".format(Kconfig.grid),
                                    "--dims={0}".format(Kconfig.dims),
                                    "--frontpoints={0}".format(Kconfig.num_CUs),
@@ -243,21 +243,21 @@ class Extasy_CocoGromacs_Static(SimulationAnalysisLoop):
 	k1_ana_kernel.uses_mpi = True
         k1_ana_kernel.link_input_data = [shareDir+'/md-{1}_0.gro > md-{1}_0.gro'.format(iterMod,iterMod-1)]
         for iter in range(1,iterMod+1):
-            for i in range(1,Kconfig.num_CUs+1):        
+            for i in range(1,Kconfig.num_CUs+1):
                 k1_ana_kernel.link_input_data = k1_ana_kernel.link_input_data + [shareDir+'/md-{2}_{3}.xtc > md-{2}_{3}.xtc'.format(iter,i,iter-1,i-1)]
-        
-                
+
+
         k1_ana_kernel.copy_output_data = []
         for i in range(0,Kconfig.num_CUs):
             #k1_ana_kernel.copy_output_data += ["{0}_{1}_{2}.gro > $SHARED/{0}_{1}_{2}.gro".format(outbase,iterMod-1,i,ext)]
             k1_ana_kernel.copy_output_data += ["{0}_{1}_{2}.gro > ".format(outbase,iterMod-1,i,ext) +shareDir+"/{0}_{1}_{2}.gro".format(outbase,iterMod-1,i,ext)]
 
 
-        k1_ana_kernel.download_output_data = ["coco.log > output/coco-iter{0}.log".format(iterMod-1)]	
-        
+        k1_ana_kernel.download_output_data = ["coco.log > output/coco-iter{0}.log".format(iterMod-1)]
+
 
         return [k1_ana_kernel]
-        
+
     def post_loop(self):
         pass
 
