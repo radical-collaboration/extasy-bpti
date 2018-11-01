@@ -63,24 +63,6 @@ def generate_pipeline(index, iterations, ensemble_size):
     #           }
     # Question - Vivek - Kconfig
     # md_stage_core_settings = { 'processes':Kconfig.num_cores_per_sim_cu/32,'process_type':'MPI', 'threads_per_process':32,'thread_type':'OpenMP'}
-    grompp_stage_core_settings = { 'processes':1,'process_type':'MPI', 'threads_per_process':1,'thread_type':'OpenMP'}
-    grompp_path='/projects/sciteam/bamm/balasubr/gromacs/gromacs-5.1.1/build-cpu-non-mpi'
-    grompp_pre_exec = [ "export PATH=$PATH:%s/bin"%grompp_path,
-                        "export GROMACS_LIB=%s/lib64"%grompp_path,
-                        "export GROMACS_INC=%s/include"%grompp_path,
-                        "export GROMACS_BIN=%s/install-cpu/bin"%grompp_path,
-                        "export GROMACS_DIR=%s/install-cpu"%grompp_path,
-                        "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:%s/lib64"%grompp_path]
-
-    md_stage_core_settings = { 'processes':32,'process_type':'MPI', 'threads_per_process':1,'thread_type':'OpenMP'}
-    mdrun_path='/projects/sciteam/bamm/balasubr/gromacs/gromacs-5.1.1/build-cpu'
-    mdrun_pre_exec = [  "export PATH=$PATH:%s/bin"%mdrun_path,
-                        "export GROMACS_LIB=%s/lib64"%mdrun_path,
-                        "export GROMACS_INC=%s/include"%mdrun_path,
-                        "export GROMACS_BIN=%s/install-cpu/bin"%mdrun_path,
-                        "export GROMACS_DIR=%s/install-cpu"%mdrun_path,
-                        "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:%s/lib64"%mdrun_path]
-
 
     for iter_cnt in range(prev_sim_last_iter_to_use, total_iterations):
 
@@ -486,22 +468,8 @@ def generate_pipeline(index, iterations, ensemble_size):
             #print "iter,iterMod,AnaCUcores = ",iteration,", ",iterMod,", ", k1_ana_kernel.cores
             #print " "
 
-        t.cpu_reqs = {
-                        'processes': int(min(Kconfig.num_CUs*(iter_cnt+1),RPconfig.PILOTSIZE)) , #defualt is 1
-                        'process_type': 'MPI',                                     # default is None, Other option is 'MPI'
-                        'threads_per_process': 1                           ,       # default is 1
-                        'thread_type':None                                      # default is Non, Other option is 'OpenMP'
-                    }
-
-        t.pre_exec = [
-                        "module load PrgEnv-gnu",
-                        "module load bwpy",
-                        "source /projects/sciteam/bamm/balasubr/env-coco/bin/activate",
-                        # "export PATH=$PATH:/projects/sciteam/bamm/balasubr/env-coco/bin",
-                        # "export PYTHONPATH=$PYTHONPATH:/projects/sciteam/bamm/balasubr/env-coco/lib/python-2.7/site-packages",
-                        # "export PREFIX_PATH='/projects/sciteam/bamm/balasubr/env-coco'",
-                        # "export LD_LIBRARY_PATH=$PREFIX_PATH/lib:$LD_LIBRARY_PATH"
-                    ]
+        t.cpu_reqs = coco_stage_core_settings
+        t.pre_exec = coco_pre_exec
         t.executable = ["pyCoCo"]
 
 
@@ -519,7 +487,9 @@ def generate_pipeline(index, iterations, ensemble_size):
                         "--topfile=md-{0}_0.gro".format(iter_cnt),
                         "--mdfile=*.xtc",
                         "--output={0}_{1}_.gro".format(outbase,iter_cnt),
-                        "--atom_selection={0}".format(Kconfig.sel)]
+                        '--nompi'       # mpi doesn't seem to work
+                        # "--atom_selection={0}".format(Kconfig.sel)    # not recognized
+                        ]
 
 
         # Question - Vivek - Below is cp from coco.py. I see there is an option for "uses_mpi"
@@ -597,6 +567,39 @@ if __name__ == '__main__':
         if ext == '':
             ext = '.pdb'
 
+        # Set MPI settings and modules to be load for grompp tasks
+        grompp_stage_core_settings = { 'processes':1,'process_type':'MPI', 'threads_per_process':1,'thread_type':'OpenMP'}
+        grompp_path='/projects/sciteam/bamm/balasubr/gromacs/gromacs-5.1.1/build-cpu-non-mpi'
+        grompp_pre_exec = [ "export PATH=$PATH:%s/bin"%grompp_path,
+                            "export GROMACS_LIB=%s/lib64"%grompp_path,
+                            "export GROMACS_INC=%s/include"%grompp_path,
+                            "export GROMACS_BIN=%s/install-cpu/bin"%grompp_path,
+                            "export GROMACS_DIR=%s/install-cpu"%grompp_path,
+                            "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:%s/lib64"%grompp_path]
+
+        # Set MPI settings and modules to be load for mdrun tasks
+        md_stage_core_settings = { 'processes':32,'process_type':'MPI', 'threads_per_process':1,'thread_type':'OpenMP'}
+        mdrun_path='/projects/sciteam/bamm/balasubr/gromacs/gromacs-5.1.1/build-cpu'
+        mdrun_pre_exec = [  "export PATH=$PATH:%s/bin"%mdrun_path,
+                            "export GROMACS_LIB=%s/lib64"%mdrun_path,
+                            "export GROMACS_INC=%s/include"%mdrun_path,
+                            "export GROMACS_BIN=%s/install-cpu/bin"%mdrun_path,
+                            "export GROMACS_DIR=%s/install-cpu"%mdrun_path,
+                            "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:%s/lib64"%mdrun_path]
+
+        # Set MPI settings and modules to be load for coco tasks
+        coco_stage_core_settings = {
+                        # 'processes': int(min(Kconfig.num_CUs,RPconfig.PILOTSIZE)) , #defualt is 1
+                        'processes': 1,
+                        # 'process_type': 'MPI',                                     # default is None, Other option is 'MPI'
+                        'process_type': None,
+                        'threads_per_process': 1                           ,       # default is 1
+                        'thread_type':None                                      # default is Non, Other option is 'OpenMP'
+                    }
+        coco_pre_exec = [
+                        "module swap bwpy bwpy/0.3.0",
+                        "source /mnt/b/projects/sciteam/bamm/balasubr/ve-coco/bin/activate"
+                        ]
 
         # Create Application Manager
         appman = AppManager(hostname=hostname, port=port)
