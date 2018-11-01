@@ -51,6 +51,8 @@ a user name and password.
 export RADICAL_PILOT_DBURL='<mongo url>'
 ```
 
+## Instructions to setup RADICAL Pilot, GROMACS and CoCo on Blue Waters
+
 * Setup on Blue Waters
 
 There is an additional step to perform on Blue Waters alone.
