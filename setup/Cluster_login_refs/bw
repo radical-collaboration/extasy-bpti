@@ -1,0 +1,12 @@
+
+#bw
+
+myproxy-logon -s tfca.ncsa.illinois.edu -p 7512 -l <username> -t 72
+	#when you run this command you will be prompted to enter your password for the BW system followed immediately by an RSA token (no space between pw and RSA token value)
+	# You will need to re do this every 72 hours
+
+	# then to log in you will use the following command
+
+gsissh bw.ncsa.illinois.edu
+
+

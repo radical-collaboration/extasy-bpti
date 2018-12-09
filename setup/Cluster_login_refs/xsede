@@ -1,0 +1,12 @@
+
+
+
+#xsede
+
+
+myproxy-logon -s myproxy.xsede.org -l <xsede username> -t 72
+# you need to use your xsede user name which will be different form your BW user name
+
+
+gsissh -p 2222 supermic.cct-lsu.xsede.org
+

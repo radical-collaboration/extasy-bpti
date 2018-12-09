@@ -8,7 +8,7 @@ import json
 import traceback
 # ------------------------------------------------------------------------------
 # Set default verbosity
-if os.environ.get('RADICAL_ENTK_VERBOSE') == None:
+if os.environ.get('RADICAL_ENTK_VERBOSE') == 'INFO':
     os.environ['RADICAL_ENTK_REPORT'] = 'True'
 
 
@@ -19,8 +19,8 @@ if os.environ.get('RADICAL_ENTK_VERBOSE') == None:
 # process. If you are running RabbitMQ under a docker container or another
 # VM, set "RMQ_HOSTNAME" and "RMQ_PORT" in the session where you are running
 # this script.
-hostname = os.environ.get('RMQ_HOSTNAME', 'localhost')
-port = int(os.environ.get('RMQ_PORT', 5672))
+hostname = os.environ.get('RMQ_HOSTNAME', 'two.radical-project.org')#'localhost')
+port = int(os.environ.get('RMQ_PORT', 33211))#5672))
 
 # Share directory with ALL data
 #shareDir="$SHARED"
@@ -74,6 +74,7 @@ def generate_pipeline(index, iterations, ensemble_size):
 
             # STAGE/KERNEL 1
             # Create a Stage object
+	    print "********************* SIMULATION KERNELS START *************************"
             s1 = Stage()
             s1.name = 'grompp-stage-%s' %iter_cnt
             print "s1.name = ", s1.name
@@ -404,7 +405,7 @@ def generate_pipeline(index, iterations, ensemble_size):
             t.copy_output_data = ["md-{0}_{1}_whole.xtc > ".format(iter_cnt,t_cnt) +shareDir+"/md-{0}_{1}.xtc".format(iter_cnt,t_cnt)]
 
             s8.add_tasks(t)
-
+	print " ********************************* SIM KERNELS END ************************************"
         p.add_stages(s8)
 
 
@@ -432,7 +433,7 @@ def generate_pipeline(index, iterations, ensemble_size):
                             --cycle          = Current iterMod number
                             --atom_selection = Selection of the biological part of the system we want to consider for analysis
         '''
-
+	print "************************ ANALYSIS KERNEL START *****************************"
         s9 = Stage()
         s9.name = 'coco-iter-%s'%iter_cnt
         print "s9.name = ", s9.name
@@ -468,7 +469,17 @@ def generate_pipeline(index, iterations, ensemble_size):
             #print "iter,iterMod,AnaCUcores = ",iteration,", ",iterMod,", ", k1_ana_kernel.cores
             #print " "
 
-        t.cpu_reqs = coco_stage_core_settings
+        #t.cpu_reqs = coco_stage_core_settings
+        coco_stage_core_settings = {
+                         'processes': int(min(Kconfig.num_CUs*(total_iterations+1),RPconfig.PILOTSIZE)) , #defualt is 1
+                        #'processes': 1,
+                         'process_type': 'MPI',                                     # default is None, Other option is 'MPI'
+                        #'process_type': None,
+                        'threads_per_process': 1                           ,       # default is 1
+                        'thread_type':None                                      # default is Non, Other option is 'OpenMP'
+                    }
+
+
         t.pre_exec = coco_pre_exec
         t.executable = ["pyCoCo"]
 
@@ -588,14 +599,14 @@ if __name__ == '__main__':
                             "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:%s/lib64"%mdrun_path]
 
         # Set MPI settings and modules to be load for coco tasks
-        coco_stage_core_settings = {
-                        # 'processes': int(min(Kconfig.num_CUs,RPconfig.PILOTSIZE)) , #defualt is 1
-                        'processes': 1,
-                        # 'process_type': 'MPI',                                     # default is None, Other option is 'MPI'
-                        'process_type': None,
-                        'threads_per_process': 1                           ,       # default is 1
-                        'thread_type':None                                      # default is Non, Other option is 'OpenMP'
-                    }
+        #coco_stage_core_settings = {
+        #                # 'processes': int(min(Kconfig.num_CUs,RPconfig.PILOTSIZE)) , #defualt is 1
+        #                'processes': 1,
+        #                # 'process_type': 'MPI',                                     # default is None, Other option is 'MPI'
+        #                'process_type': None,
+        #                'threads_per_process': 1                           ,       # default is 1
+        #                'thread_type':None                                      # default is Non, Other option is 'OpenMP'
+        #            }
         coco_pre_exec = [
                         "module swap bwpy bwpy/0.3.0",
                         "source /mnt/b/projects/sciteam/bamm/balasubr/ve-coco/bin/activate"
@@ -633,7 +644,7 @@ if __name__ == '__main__':
         # Assign the workflow as a set or list of Pipelines to the Application Manager
         # Note: The list order is not guaranteed to be preserved
         #def generate_pipeline(index, iterations, ensemble_size):
-        extasy_pipeline = generate_pipeline("0",Kconfig.num_iterations,Kconfig.num_CUs)
+        extasy_pipeline = generate_pipeline(0,Kconfig.num_iterations,Kconfig.num_CUs)
         appman.workflow = set([extasy_pipeline])
 
         # Run the Application Manager
