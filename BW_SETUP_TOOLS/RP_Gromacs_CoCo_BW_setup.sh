@@ -48,6 +48,13 @@ make install
 
 # Installing CoCo-Md on BW
 
-
+cd $HOME
+module load bwpy/0.3.0
+virtualenv ve-coco
+source ve-coco/bin/activate
+pip install numpy scipy cython
+pip install scikit-image
+pip install pypcazip mdtraj
+pip install extasycoco
 
 ##########################
