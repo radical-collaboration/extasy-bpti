@@ -6,9 +6,17 @@
 
 cd /scratch/sciteam/$USER
 mkdir -p radical.pilot.sandbox
-cd radical.pilot.sandbox
+cd /scratch/sciteam/$USER/radical.pilot.sandbox
+rm -rf ve.ncsa.bw_aprun.0.50.21
 wget https://raw.githubusercontent.com/radical-cybertools/radical.pilot/devel/bin/radical-pilot-create-static-ve
-sh ./radical-pilot-create-static-ve ve.ncsa.bw_aprun.0.50.7 bw
+sh ./radical-pilot-create-static-ve ve.ncsa.bw_aprun.0.50.21 bw
+
+
+#cd /scratch/sciteam/$USER
+#mkdir -p radical.pilot.sandbox
+#cd radical.pilot.sandbox
+#wget https://raw.githubusercontent.com/radical-cybertools/radical.pilot/devel/bin/radical-pilot-create-static-ve
+#sh ./radical-pilot-create-static-ve ve.ncsa.bw_aprun.0.50.7 bw
 
 # Installing Gromacs on Blue Waters
 
