@@ -1,0 +1,765 @@
+                      :-) GROMACS - gmx grompp, 2018.4 (-:
+
+                            GROMACS is written by:
+     Emile Apol      Rossen Apostolov      Paul Bauer     Herman J.C. Berendsen
+    Par Bjelkmar    Aldert van Buuren   Rudi van Drunen     Anton Feenstra  
+  Gerrit Groenhof    Aleksei Iupinov   Christoph Junghans   Anca Hamuraru   
+ Vincent Hindriksen Dimitrios Karkoulis    Peter Kasson        Jiri Kraus    
+  Carsten Kutzner      Per Larsson      Justin A. Lemkul    Viveca Lindahl  
+  Magnus Lundborg   Pieter Meulenhoff    Erik Marklund      Teemu Murtola   
+    Szilard Pall       Sander Pronk      Roland Schulz     Alexey Shvetsov  
+   Michael Shirts     Alfons Sijbers     Peter Tieleman    Teemu Virolainen 
+ Christian Wennberg    Maarten Wolf   
+                           and the project leaders:
+        Mark Abraham, Berk Hess, Erik Lindahl, and David van der Spoel
+
+Copyright (c) 1991-2000, University of Groningen, The Netherlands.
+Copyright (c) 2001-2017, The GROMACS development team at
+Uppsala University, Stockholm University and
+the Royal Institute of Technology, Sweden.
+check out http://www.gromacs.org for more information.
+
+GROMACS is free software; you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License
+as published by the Free Software Foundation; either version 2.1
+of the License, or (at your option) any later version.
+
+GROMACS:      gmx grompp, version 2018.4
+Executable:   /u/sciteam/suess/gromacs/gromacs-2018.4/bin/gmx_mpi
+Data prefix:  /u/sciteam/suess/gromacs/gromacs-2018.4
+Working dir:  /mnt/a/u/sciteam/suess/gmx-coco-xflow/inp_files
+Command line:
+  gmx_mpi grompp -f run1.mdp -c bpti.gro -p topol.top -o testBW.tpr -maxwarn 1
+
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -1849299608
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+Ignoring obsolete mdp entry 'title'
+Ignoring obsolete mdp entry 'cpp'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -832799008
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to 773870673
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Generated 2145 of the 2145 1-4 parameter combinations
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -613034009
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to 329491234
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to 1985030960
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -2134700269
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -1122343652
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -1746922748
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -1382320576
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -1442751437
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Excluding 3 bonded neighbours molecule type 'BPTI'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -680485419
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    27 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 27 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n0] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 27
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    107 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 107 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n3] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 107
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    89 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 89 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n2] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 89
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -1296454846
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    82 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 82 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n2] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 82
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+Excluding 3 bonded neighbours molecule type 'BPTI'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -1307808649
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    52 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 52 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n1] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 52
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    87 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 87 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n2] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 87
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Excluding 3 bonded neighbours molecule type 'BPTI'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Removing all charge groups because cutoff-scheme=Verlet
+Setting the LD random seed to -504448686
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    105 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 105 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n3] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 105
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    97 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 97 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n3] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 97
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to 1184666370
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    124 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 124 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n3] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 124
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to 920644482
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+Excluding 3 bonded neighbours molecule type 'BPTI'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -890780066
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    108 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 108 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n3] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 108
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to -1054055573
+_pmiu_daemon(SIGCHLD): [NID 25999] [c3-11c1s7n3] [Thu Feb 14 06:17:33 2019] PE RANK 107 exit signal Aborted
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    71 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 71 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n2] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 71
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    81 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 81 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n2] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 81
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+Generated 2145 of the 2145 1-4 parameter combinations
+Excluding 3 bonded neighbours molecule type 'BPTI'
+Excluding 2 bonded neighbours molecule type 'SOL'
+Excluding 1 bonded neighbours molecule type 'CL'
+
+NOTE 1 [file run1.mdp]:
+  With Verlet lists the optimal nstlist is >= 10, with GPUs >= 20. Note
+  that with the Verlet scheme, nstlist has no effect on the accuracy of
+  your simulation.
+
+Setting the LD random seed to 1712365547
+_pmiu_daemon(SIGCHLD): [NID 25936] [c3-11c1s7n0] [Thu Feb 14 06:17:33 2019] PE RANK 27 exit signal Aborted
+Removing all charge groups because cutoff-scheme=Verlet
+
+-------------------------------------------------------
+Program:     gmx grompp, version 2018.4
+Source file: src/gromacs/gmxpreprocess/grompp.cpp (line 2008)
+MPI rank:    74 (out of 128)
+
+Fatal error:
+Cannot find position restraint file restraint.gro (option -r).
+From GROMACS-2018, you need to specify the position restraint coordinate files
+explicitly to avoid mistakes, although you can still use the same file as you
+specify for the -c option.
+
+For more information and tips for troubleshooting, please check the GROMACS
+website at http://www.gromacs.org/Documentation/Errors
+-------------------------------------------------------
+Rank 74 [Thu Feb 14 06:17:33 2019] [c3-11c1s7n2] application called MPI_Abort(MPI_COMM_WORLD, 1) - process 74
+[NID 25936] 2019-02-14 06:17:33 Apid 76118885: initiated application termination
+Generated 2145 of the 2145 non-bonded parameter combinations
+Generating 1-4 interactions: fudge = 0.5
+_pmiu_daemon(SIGCHLD): [NID 25937] [c3-11c1s7n1] [Thu Feb 14 06:17:33 2019] PE RANK 52 exit signal Aborted
+Generated 2145 of the 2145 1-4 parameter combinations

@@ -1,0 +1,19 @@
+----------------------------------------
+Begin Torque Prologue on nid25358
+at Thu Feb 14 06:09:40 CST 2019
+Job Id:			9616169.bw
+Username:		suess
+Group:			PRAC_bamm
+Job name:		GMX-CoCoMD
+Requested resources:	nodes=4:ppn=32:xe,walltime=00:15:00,neednodes=4:ppn=32:xe
+Queue:			high
+Account:		bamm
+End Torque Prologue:  0.129 elapsed
+----------------------------------------
+
+
+
+
+/u/sciteam/suess/gromacs/gromacs-2018.4/bin/gmx_mpi
+Application 76118812 exit codes: 134
+Application 76118812 resources: utime ~4s, stime ~123s, Rss ~28428, inblocks ~87804, outblocks ~154572

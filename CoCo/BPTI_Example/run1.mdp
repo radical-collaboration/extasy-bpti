@@ -1,0 +1,19 @@
+;
+;       Restrained energy min setp for CoCo-MD on BPTI
+;
+
+define          = -DPOSRES
+title           = bpti
+cpp             = /usr/bin/cpp
+integrator      = steep
+emtol           = 1000.0
+emstep          = 0.01
+nsteps          = 1000
+nstlist         = 1
+nstlog          = 100
+cutoff-scheme   = verlet
+ns_type         = grid
+pbc             = xyz
+coulombtype     = PME
+rcoulomb        = 1.0
+rvdw            = 1.0
